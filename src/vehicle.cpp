@@ -5,6 +5,13 @@ Vehicle::Vehicle()
     : vehicleID(""), make(""), model(""), year(0), color(""), licensePlate(""),
       capacity(0), vehicleType(""), available(true), driver{} {}
 
+Vehicle::Vehicle(std::string vehicleID, std::string make, std::string model,
+                 int year, std::string color, std::string licensePlate,
+                 int capacity, std::string vehicleType)
+    : vehicleID(vehicleID), make(make), model(model), year(year), color(color),
+      licensePlate(licensePlate), capacity(capacity), vehicleType(vehicleType),
+      available(true), driver{} {}
+
 std::string Vehicle::getVehicleID() { return this->vehicleID; }
 
 std::string Vehicle::getVehicleInfo() {

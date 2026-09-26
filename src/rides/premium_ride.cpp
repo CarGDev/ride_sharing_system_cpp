@@ -2,25 +2,23 @@
 #include <string>
 
 PremiumRide::PremiumRide(std::string rideID, std::string pickup,
-                         std::string dropoff, double distance)
-    : Ride(rideID, pickup, dropoff, distance), ratePerMile(3.5), baseFare(10.0),
-      premiumFee(8.0), serviceFee(4.0), minimumFare(18.0), maxPassengers(4),
-      vehicleType("Premium"), luxuryVehicle(true), priorityPickup(true) {}
+                         std::string dropoff, double distance,
+                         int durationMinutes)
+    : Ride(rideID, pickup, dropoff, distance, durationMinutes),
+      ratePerMile(1.0), baseFare(0.0), premiumFee(0.0), serviceFee(0.0),
+      minimumFare(0.0), maxPassengers(4), vehicleType("Premium"),
+      luxuryVehicle(true), priorityPickup(true) {}
 
 double PremiumRide::calculateFare() {
-  this->fare = this->baseFare + (this->distance * this->ratePerMile) +
-               this->premiumFee + this->serviceFee;
-
-  if (this->fare < this->minimumFare) {
-    this->fare = this->minimumFare;
-  }
-
+  this->fare = (this->distance + this->durationMinutes) * this->ratePerMile;
   return this->fare;
 }
 
 std::string PremiumRide::rideDetails() {
   return "Premium Ride " + this->rideID + " from " + this->pickupLocation +
-         " to " + this->dropoffLocation + " - Status: " + this->status;
+         " to " + this->dropoffLocation + " - Miles: " +
+         std::to_string(this->distance) + " - Minutes: " +
+         std::to_string(this->durationMinutes) + " - Status: " + this->status;
 }
 
 double PremiumRide::getRatePerMile() { return this->ratePerMile; }

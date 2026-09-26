@@ -13,11 +13,12 @@ protected:
   std::string status;
 
   Ride(std::string rideID, std::string pickup, std::string dropoff,
-       double distance);
+       double distance, int durationMinutes);
 
 public:
   virtual ~Ride() = default;
 
+  int getDurationMinutes();
   virtual double calculateFare() = 0;
   virtual std::string rideDetails() = 0;
 

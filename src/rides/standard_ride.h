@@ -14,7 +14,7 @@ private:
 
 public:
   StandardRide(std::string rideID, std::string pickup, std::string dropoff,
-               double distance);
+               double distance, int durationMinutes);
 
   double calculateFare() override;
   std::string rideDetails() override;

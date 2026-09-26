@@ -18,6 +18,9 @@ private:
 
 public:
   Vehicle();
+  Vehicle(std::string vehicleID, std::string make, std::string model, int year,
+          std::string color, std::string licensePlate, int capacity,
+          std::string vehicleType);
 
   std::string getVehicleID();
   std::string getVehicleInfo();

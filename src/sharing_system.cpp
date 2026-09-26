@@ -32,6 +32,16 @@ Vehicle *RideSharingSystem::findAvailableVehicle() {
   return nullptr;
 }
 
+Vehicle *RideSharingSystem::findAvailableVehicle(std::string vehicleType) {
+  for (Vehicle &vehicle : this->vehicles) {
+    if (vehicle.isAvailable() && vehicle.getVehicleType() == vehicleType) {
+      return &vehicle;
+    }
+  }
+
+  return nullptr;
+}
+
 std::vector<Driver> RideSharingSystem::getDrivers() { return this->drivers; }
 
 std::vector<Rider> RideSharingSystem::getRiders() { return this->riders; }

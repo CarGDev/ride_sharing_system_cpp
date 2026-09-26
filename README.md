@@ -3,11 +3,11 @@
 The Ride Sharing System must include the following components at a minimum. You should add additional functionality and feel free to be creative.
 
 1. Ride Class:
-   Create a base class Ride that holds core details such as rideID, pickupLocation, dropoffLocation, distance, and fare.
-   Define methods for calculating the fare() based on distance and a rideDetails() method to display ride information.
+   Create a base class Ride that holds core details such as rideID, pickupLocation, dropoffLocation, distance, durationMinutes, and fare.
+   Define methods for calculating the fare() based on distance and duration, and a rideDetails() method to display ride information.
 2. Specific Ride Subclasses:
    Implement at least two derived classes of Ride, such as StandardRide and PremiumRide.
-   Each subclass should override the fare() method to calculate the fare based on ride type (e.g., premium rides might cost more per mile).
+   Each subclass should override the fare() method to calculate the fare based on ride type. Standard rides cost 1.50 USD per mile/minute, and premium rides cost 1.00 USD per mile/minute.
    Demonstrate polymorphism by calling the overridden fare() method on a list of different ride types.
 3. Driver Class:
    Create a Driver class with attributes like driverID, name, rating, and assignedRides, a list of rides completed by the driver.
@@ -22,6 +22,11 @@ The Ride Sharing System must include the following components at a minimum. You 
 ## Current Class Diagram
 
 This diagram reflects the classes currently implemented in `src/`.
+
+Fare formulas:
+
+- Standard fare = `1.5 * (distance + durationMinutes)`
+- Premium fare = `1.0 * (distance + durationMinutes)`
 
 ```mermaid
 classDiagram
@@ -120,6 +125,7 @@ classDiagram
         +rideDetails() String
         +getRideID() String
         +getDistance() double
+        +getDurationMinutes() int
         +getFare() double
         +getStatus() String
         +setStatus(String status) void
@@ -132,7 +138,7 @@ classDiagram
         -double bookingFee
         -int maxPassengers
         -String vehicleType
-        +StandardRide(String rideID, String pickup, String dropoff, double distance)
+        +StandardRide(String rideID, String pickup, String dropoff, double distance, int durationMinutes)
         +calculateFare() double
         +rideDetails() String
         +getRatePerMile() double
@@ -153,7 +159,7 @@ classDiagram
         -String vehicleType
         -boolean luxuryVehicle
         -boolean priorityPickup
-        +PremiumRide(String rideID, String pickup, String dropoff, double distance)
+        +PremiumRide(String rideID, String pickup, String dropoff, double distance, int durationMinutes)
         +calculateFare() double
         +rideDetails() String
         +getRatePerMile() double

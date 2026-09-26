@@ -2,25 +2,23 @@
 #include <string>
 
 StandardRide::StandardRide(std::string rideID, std::string pickup,
-                           std::string dropoff, double distance)
-    : Ride(rideID, pickup, dropoff, distance), ratePerMile(2.0), baseFare(5.0),
-      minimumFare(8.0), bookingFee(2.0), maxPassengers(4),
+                           std::string dropoff, double distance,
+                           int durationMinutes)
+    : Ride(rideID, pickup, dropoff, distance, durationMinutes),
+      ratePerMile(1.5), baseFare(0.0), minimumFare(0.0), bookingFee(0.0),
+      maxPassengers(4),
       vehicleType("Standard") {}
 
 double StandardRide::calculateFare() {
-  this->fare =
-      this->baseFare + (this->distance * this->ratePerMile) + this->bookingFee;
-
-  if (this->fare < this->minimumFare) {
-    this->fare = this->minimumFare;
-  }
-
+  this->fare = (this->distance + this->durationMinutes) * this->ratePerMile;
   return this->fare;
 }
 
 std::string StandardRide::rideDetails() {
   return "Standard Ride " + this->rideID + " from " + this->pickupLocation +
-         " to " + this->dropoffLocation + " - Status: " + this->status;
+         " to " + this->dropoffLocation + " - Miles: " +
+         std::to_string(this->distance) + " - Minutes: " +
+         std::to_string(this->durationMinutes) + " - Status: " + this->status;
 }
 
 double StandardRide::getRatePerMile() { return this->ratePerMile; }

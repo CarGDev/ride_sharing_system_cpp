@@ -4,6 +4,7 @@
 #include "person/rider.h"
 #include "rides/rides.h"
 #include "vehicle.h"
+#include <string>
 #include <vector>
 
 class RideSharingSystem {
@@ -21,6 +22,7 @@ public:
 
   Driver *findAvailableDriver();
   Vehicle *findAvailableVehicle();
+  Vehicle *findAvailableVehicle(std::string vehicleType);
 
   std::vector<Driver> getDrivers();
   std::vector<Rider> getRiders();
