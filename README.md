@@ -3,82 +3,108 @@
 The Ride Sharing System must include the following components at a minimum. You should add additional functionality and feel free to be creative.
 
 1. Ride Class:
-Create a base class Ride that holds core details such as rideID, pickupLocation, dropoffLocation, distance, and fare.
-Define methods for calculating the fare() based on distance and a rideDetails() method to display ride information.
+   Create a base class Ride that holds core details such as rideID, pickupLocation, dropoffLocation, distance, and fare.
+   Define methods for calculating the fare() based on distance and a rideDetails() method to display ride information.
 2. Specific Ride Subclasses:
-Implement at least two derived classes of Ride, such as StandardRide and PremiumRide.
-Each subclass should override the fare() method to calculate the fare based on ride type (e.g., premium rides might cost more per mile).
-Demonstrate polymorphism by calling the overridden fare() method on a list of different ride types.
+   Implement at least two derived classes of Ride, such as StandardRide and PremiumRide.
+   Each subclass should override the fare() method to calculate the fare based on ride type (e.g., premium rides might cost more per mile).
+   Demonstrate polymorphism by calling the overridden fare() method on a list of different ride types.
 3. Driver Class:
-Create a Driver class with attributes like driverID, name, rating, and assignedRides, a list of rides completed by the driver.
-Include methods such as addRide(Ride ride) to add rides to the driver’s list and getDriverInfo() to display driver details.
-Use encapsulation to keep assignedRides private and accessible only through defined methods.
+   Create a Driver class with attributes like driverID, name, rating, and assignedRides, a list of rides completed by the driver.
+   Include methods such as addRide(Ride ride) to add rides to the driver’s list and getDriverInfo() to display driver details.
+   Use encapsulation to keep assignedRides private and accessible only through defined methods.
 4. Rider Class:
-Create a Rider class with attributes like riderID, name, and requestedRides, a list of rides requested by the rider.
-Include methods such as requestRide(Ride ride) to add a ride to the rider’s requested list, and viewRides() to display ride history.
+   Create a Rider class with attributes like riderID, name, and requestedRides, a list of rides requested by the rider.
+   Include methods such as requestRide(Ride ride) to add a ride to the rider’s requested list, and viewRides() to display ride history.
 5. System Functionality
-Demonstrate polymorphism by storing rides of different types in a list (array or collection) and invoking fare() and rideDe- tails() polymorphically.
+   Demonstrate polymorphism by storing rides of different types in a list (array or collection) and invoking fare() and rideDe- tails() polymorphically.
 
-## Class Diagram
+## Current Class Diagram
+
+This diagram reflects the classes currently implemented in `src/`.
 
 ```mermaid
 classDiagram
 
-    class Person {
-        <<abstract>>
-        #String name
-        #String last_name
-        #String id
-        #String email
-        #String phone
+    class PersonaData {
+        +String name
+        +String last_name
+        +String id
+        +String email
+        +String phone
+    }
+
+    class Persona {
+        +String name
+        +String last_name
+        +String id
+        +String email
+        +String phone
         +getFullName() String
-        +getId() String
-        +getData() List~String~
-        +setName(String name) void
-        +setLastName(String last_name) void
+        +getData() PersonaData
+        +setFullName(String name, String last_name) void
         +setId(String id) void
         +setEmail(String email) void
         +setPhone(String phone) void
     }
 
+    class DriverData {
+        +String name
+        +String last_name
+        +String id
+        +String email
+        +String phone
+        +double rating
+        +boolean available
+    }
+
     class Driver {
         -double rating
+        -List~int~ assigned_rides
         -boolean available
-        -List~Ride~ assignedRides
-        +addRide(Ride ride) void
-        +completeRide(Ride ride) void
-        +getDriverInfo() String
-        +getAssignedRides() List~Ride~
+        -int current_ride_id
+        +Driver()
+        +getFullName() String
+        +addRide(int id_ride) void
+        +getDriverInfo() DriverData
+        +closeRide(int id) void
+        +getCurrentRideId() int
+        +setCurrentRideId(int current_ride_id) void
         +getRating() double
         +setRating(double rating) void
         +isAvailable() boolean
         +setAvailable(boolean available) void
     }
 
-    class Rider {
-        -List~Ride~ requestedRides
-        +requestRide(Ride ride) void
-        +cancelRide(Ride ride) void
-        +viewRides() List~Ride~
-        +getRiderInfo() String
+    class RiderData {
+        +String name
+        +String last_name
+        +String id
+        +String email
+        +String phone
+        +int current_ride_id
+        +boolean on_ride
     }
 
-    class Vehicle {
-        -String vehicleID
-        -String make
-        -String model
-        -int year
-        -String color
-        -String licensePlate
-        -int capacity
-        -String vehicleType
-        -boolean available
-        +getVehicleID() String
-        +getVehicleInfo() String
-        +getVehicleType() String
-        +getCapacity() int
-        +isAvailable() boolean
-        +setAvailable(boolean available) void
+    class RideRequestsView {
+        +List~int~ requested
+        +List~int~ cancelled
+    }
+
+    class Rider {
+        -List~int~ ride_requested
+        -List~int~ cancel_ride_requested
+        -int current_ride_id
+        -boolean on_ride
+        -DriverData current_driver
+        +Rider()
+        +getFullName() String
+        +requestRide(int id, DriverData driver) void
+        +endRide(int id) void
+        +cancelRide(int id) void
+        +getDriverData() DriverData
+        +viewRides() RideRequestsView
+        +getRiderInfo() RiderData
     }
 
     class Ride {
@@ -93,6 +119,7 @@ classDiagram
         +calculateFare() double
         +rideDetails() String
         +getRideID() String
+        +getDistance() double
         +getFare() double
         +getStatus() String
         +setStatus(String status) void
@@ -104,71 +131,97 @@ classDiagram
         -double minimumFare
         -double bookingFee
         -int maxPassengers
+        -String vehicleType
+        +StandardRide(String rideID, String pickup, String dropoff, double distance)
         +calculateFare() double
         +rideDetails() String
+        +getRatePerMile() double
+        +getBaseFare() double
+        +getMinimumFare() double
+        +getBookingFee() double
+        +getMaxPassengers() int
+        +getVehicleType() String
     }
 
     class PremiumRide {
         -double ratePerMile
         -double baseFare
-        -double minimumFare
         -double premiumFee
         -double serviceFee
+        -double minimumFare
         -int maxPassengers
+        -String vehicleType
+        -boolean luxuryVehicle
         -boolean priorityPickup
+        +PremiumRide(String rideID, String pickup, String dropoff, double distance)
         +calculateFare() double
         +rideDetails() String
+        +getRatePerMile() double
+        +getBaseFare() double
+        +getPremiumFee() double
+        +getServiceFee() double
+        +getMinimumFare() double
+        +getMaxPassengers() int
+        +getVehicleType() String
+        +hasLuxuryVehicle() boolean
+        +hasPriorityPickup() boolean
+    }
+
+    class Vehicle {
+        -String vehicleID
+        -String make
+        -String model
+        -int year
+        -String color
+        -String licensePlate
+        -int capacity
+        -String vehicleType
+        -boolean available
+        -Driver driver
+        +Vehicle()
+        +getVehicleID() String
+        +getVehicleInfo() String
+        +getVehicleType() String
+        +getCapacity() int
+        +setDriver(Driver driver) void
+        +getDriver() Driver
+        +isAvailable() boolean
+        +setAvailable(boolean available) void
     }
 
     class RideSharingSystem {
-        -String systemName
-        -List~Rider~ riders
         -List~Driver~ drivers
+        -List~Rider~ riders
         -List~Vehicle~ vehicles
-        -List~Ride~ rides
-
-        +addRider(Rider rider) void
+        -List~Ride*~ rides
         +addDriver(Driver driver) void
+        +addRider(Rider rider) void
         +addVehicle(Vehicle vehicle) void
-        +addRide(Ride ride) void
-
-        +removeRider(String riderID) void
-        +removeDriver(String driverID) void
-        +removeVehicle(String vehicleID) void
-
-        +findRider(String riderID) Rider
-        +findDriver(String driverID) Driver
-        +findVehicle(String vehicleID) Vehicle
-        +findRide(String rideID) Ride
-
-        +getRiders() List~Rider~
+        +addRide(Ride* ride) void
+        +findAvailableDriver() Driver*
+        +findAvailableVehicle() Vehicle*
         +getDrivers() List~Driver~
+        +getRiders() List~Rider~
         +getVehicles() List~Vehicle~
-        +getRides() List~Ride~
-
-        +findAvailableDriver() Driver
-        +findAvailableVehicle() Vehicle
-        +assignDriver(Ride ride, Driver driver) void
-        +assignVehicle(Driver driver, Vehicle vehicle) void
+        +getRides() List~Ride*~
         +processRides() void
     }
 
-    %% Inheritance
-    Person <|-- Driver
-    Person <|-- Rider
-
+    Persona <|-- Driver
+    Persona <|-- Rider
     Ride <|-- StandardRide
     Ride <|-- PremiumRide
 
-    %% Driver/Rider relationships
-    Driver "1" --> "0..*" Ride : completes
-    Rider "1" --> "0..*" Ride : requests
-    Driver "0..1" --> "0..1" Vehicle : drives
+    PersonaData <.. Persona : returns
+    DriverData <.. Driver : returns
+    RiderData <.. Rider : returns
+    RideRequestsView <.. Rider : returns
 
-    %% System stores/manages objects
-    RideSharingSystem "1" o-- "0..*" Rider : manages
-    RideSharingSystem "1" o-- "0..*" Driver : manages
-    RideSharingSystem "1" o-- "0..*" Vehicle : manages
-    RideSharingSystem "1" o-- "0..*" Ride : manages
+    RideSharingSystem "1" o-- "0..*" Driver : stores
+    RideSharingSystem "1" o-- "0..*" Rider : stores
+    RideSharingSystem "1" o-- "0..*" Vehicle : stores
+    RideSharingSystem "1" o-- "0..*" Ride : stores pointers
 
+    Driver "1" --> "0..*" Ride : stores ride ids
+    Rider "1" --> "0..*" Ride : stores ride ids
 ```
